@@ -1,4 +1,5 @@
 def input_int(prompt: str) -> int:
+    """Безопасный ввод целого числа."""
     while True:
         try:
             return int(input(prompt))
@@ -7,6 +8,7 @@ def input_int(prompt: str) -> int:
 
 
 def input_float(prompt: str) -> float:
+    """Безопасный ввод вещественного числа."""
     while True:
         try:
             return float(input(prompt).replace(",", "."))
