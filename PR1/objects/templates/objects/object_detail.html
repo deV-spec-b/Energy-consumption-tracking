@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if accounting_object %}
+        {{ accounting_object.address }} – Учёт энергопотребления
+    {% else %}
+        Объект не найден – Учёт энергопотребления
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if accounting_object %}
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{ accounting_object.address }}</h1>
+                <p class="card-text"><strong>ID:</strong> {{ accounting_object.id }}</p>
+                <p class="card-text"><strong>Тип:</strong> {{ accounting_object.object_type }}</p>
+                <p class="card-text"><strong>Площадь:</strong> {{ accounting_object.area }} м²</p>
+            </div>
+        </div>
+    {% else %}
+        <h1 class="text-danger">Объект не найден</h1>
+        <p>Объект с указанным идентификатором отсутствует.</p>
+    {% endif %}
+    <a href="{% url 'objects:list' %}" class="btn btn-outline-secondary mt-3">
+        ← к списку объектов
+    </a>
+{% endblock %}

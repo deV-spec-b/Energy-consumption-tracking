@@ -2,7 +2,9 @@ from django.urls import path
 
 from . import views
 
+app_name = "objects"
+
 urlpatterns = [
-    path("", views.objects_list, name="objects"),
-    path("<int:object_id>/", views.object_detail, name="object_detail"),
+    path("", views.objects_list, name="list"),
+    path("<int:object_id>/", views.object_detail, name="detail"),
 ]

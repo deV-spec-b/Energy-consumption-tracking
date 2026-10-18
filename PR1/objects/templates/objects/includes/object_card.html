@@ -1,0 +1,13 @@
+<article class="card object-card mb-3">
+    <div class="card-body">
+        <h2 class="card-title">
+            {{ accounting_object.address|default:"Без адреса" }}
+        </h2>
+        <p class="card-text">
+            {{ accounting_object.object_type }}, {{ accounting_object.area }} м²
+        </p>
+        <a href="{% url 'objects:detail' accounting_object.id %}" class="btn btn-primary">
+            Подробнее
+        </a>
+    </div>
+</article>

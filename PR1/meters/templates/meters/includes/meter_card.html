@@ -1,0 +1,13 @@
+<article class="card meter-card mb-3">
+    <div class="card-body">
+        <h2 class="card-title">
+            {{ meter.number|default:"Без номера" }}
+        </h2>
+        <p class="card-text">
+            {{ meter.meter_type }} – {{ meter.accounting_object.address }}
+        </p>
+        <a href="{% url 'meters:detail' meter.id %}" class="btn btn-primary">
+            Подробнее
+        </a>
+    </div>
+</article>

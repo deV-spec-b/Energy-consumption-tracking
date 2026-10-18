@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Счётчики – Учёт энергопотребления
+{% endblock %}
+
+{% block content %}
+    <h1>Счётчики</h1>
+    <p>Всего счётчиков: {{ meters|length }}</p>
+    <ul class="list-group">
+        {% for meter in meters %}
+            {% include "meters/includes/meter_card.html" %}
+        {% empty %}
+            <li class="list-group-item">Счётчики не найдены.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

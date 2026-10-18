@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Главная – Учёт энергопотребления
+{% endblock %}
+
+{% block content %}
+    <h1 class="display-4">Система учёта энергопотребления</h1>
+    <p class="lead">
+        Веб-интерфейс для управляющей компании и сотрудников.
+    </p>
+    <p>Основные разделы:</p>
+    <a href="{% url 'objects:list' %}" class="btn btn-primary me-2">Объекты</a>
+    <a href="{% url 'meters:list' %}" class="btn btn-secondary me-2">Счётчики</a>
+    <a href="{% url 'readings:list' %}" class="btn btn-outline-secondary">Показания</a>
+{% endblock %}

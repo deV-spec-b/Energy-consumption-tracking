@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if meter %}
+        Счётчик {{ meter.number }} – Учёт энергопотребления
+    {% else %}
+        Счётчик не найден – Учёт энергопотребления
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if meter %}
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Счётчик {{ meter.number }}</h1>
+                <p class="card-text"><strong>Тип:</strong> {{ meter.meter_type }}</p>
+                <p class="card-text"><strong>Объект:</strong> {{ meter.accounting_object.address }}</p>
+                <p class="card-text"><strong>Расход:</strong> {{ consumption }}</p>
+            </div>
+        </div>
+    {% else %}
+        <h1 class="text-danger">Счётчик не найден</h1>
+        <p>Счётчик с указанным идентификатором отсутствует.</p>
+    {% endif %}
+    <a href="{% url 'meters:list' %}" class="btn btn-outline-secondary mt-3">
+        ← к списку счётчиков
+    </a>
+{% endblock %}

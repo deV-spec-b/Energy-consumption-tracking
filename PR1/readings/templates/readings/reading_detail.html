@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if reading %}
+        Показание {{ reading.id }} – Учёт энергопотребления
+    {% else %}
+        Показание не найдено – Учёт энергопотребления
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if reading %}
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Показание №{{ reading.id }}</h1>
+                <p class="card-text"><strong>Счётчик:</strong> {{ reading.meter.number }}</p>
+                <p class="card-text"><strong>Дата:</strong> {{ reading.reading_date }}</p>
+                <p class="card-text"><strong>Значение:</strong> {{ reading.value }}</p>
+            </div>
+        </div>
+    {% else %}
+        <h1 class="text-danger">Показание не найдено</h1>
+        <p>Показание с указанным идентификатором отсутствует.</p>
+    {% endif %}
+    <a href="{% url 'readings:list' %}" class="btn btn-outline-secondary mt-3">
+        ← к списку показаний
+    </a>
+{% endblock %}

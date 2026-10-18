@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Показания – Учёт энергопотребления
+{% endblock %}
+
+{% block content %}
+    <h1>Показания</h1>
+    <p>Всего показаний: {{ readings|length }}</p>
+    <ul class="list-group">
+        {% for reading in readings %}
+            {% include "readings/includes/reading_card.html" %}
+        {% empty %}
+            <li class="list-group-item">Показания не найдены.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
