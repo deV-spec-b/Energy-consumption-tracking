@@ -4,7 +4,7 @@
             {{ meter.number|default:"Без номера" }}
         </h2>
         <p class="card-text">
-            {{ meter.meter_type }} – {{ meter.accounting_object.address }}
+            {{ meter.meter_type }} – {{ meter.address }}
         </p>
         <a href="{% url 'meters:detail' meter.id %}" class="btn btn-primary">
             Подробнее

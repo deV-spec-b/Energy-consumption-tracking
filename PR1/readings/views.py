@@ -1,30 +1,46 @@
 from django.shortcuts import render
-
-from models.readings import find_reading_by_id
-from storage import load_meters, load_objects, load_readings
+from db.database import get_connection
 
 
 def readings_list(request):
-    objects_list = load_objects("data/objects.json")
-    meters_list = load_meters("data/meters.json", objects_list)
-    readings_list = load_readings("data/readings.json", meters_list)
-    context = {
-        "readings": readings_list,
-    }
-    return render(request, "readings/reading_list.html", context)
+    conn = get_connection()
+    readings = conn.execute(
+        """
+        SELECT 
+            r.id,
+            r.value,
+            r.reading_date,
+            m.meter_type,
+            m.number,
+            o.address
+        FROM readings r
+        JOIN meters m ON r.meter_id = m.id
+        JOIN accounting_objects o ON m.object_id = o.id
+        ORDER BY r.reading_date DESC
+        """
+    ).fetchall()
+    conn.close()
+    return render(request, "readings/reading_list.html", {"readings": readings})
 
 
 def reading_detail(request, reading_id):
-    objects_list = load_objects("data/objects.json")
-    meters_list = load_meters("data/meters.json", objects_list)
-    readings_list = load_readings("data/readings.json", meters_list)
-    reading = find_reading_by_id(readings_list, reading_id)
-    context = {
-        "reading": reading,
-    }
+    conn = get_connection()
+    reading = conn.execute(
+        """
+        SELECT 
+            r.id, r.value, r.reading_date,
+            m.meter_type, m.number, o.address
+        FROM readings r
+        JOIN meters m ON r.meter_id = m.id
+        JOIN accounting_objects o ON m.object_id = o.id
+        WHERE r.id = ?
+        """,
+        (reading_id,),
+    ).fetchone()
+    conn.close()
     return render(
         request,
         "readings/reading_detail.html",
-        context,
+        {"reading": reading},
         status=404 if reading is None else 200,
     )

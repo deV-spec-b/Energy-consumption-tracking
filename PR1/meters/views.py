@@ -1,35 +1,41 @@
 from django.shortcuts import render
-
-from models.meters import find_meter_by_id
-from models.readings import calculate_consumption, filter_readings_by_meter
-from storage import load_meters, load_objects, load_readings
+from db.database import get_connection
 
 
 def meters_list(request):
-    objects_list = load_objects("data/objects.json")
-    meters_list = load_meters("data/meters.json", objects_list)
-    context = {
-        "meters": meters_list,
-    }
-    return render(request, "meters/meter_list.html", context)
+    conn = get_connection()
+    meters = conn.execute(
+        """
+        SELECT 
+            m.id,
+            m.number,
+            m.meter_type,
+            m.status,
+            o.address
+        FROM meters m
+        JOIN accounting_objects o ON m.object_id = o.id
+        ORDER BY o.address
+        """
+    ).fetchall()
+    conn.close()
+    return render(request, "meters/meter_list.html", {"meters": meters})
 
 
 def meter_detail(request, meter_id):
-    objects_list = load_objects("data/objects.json")
-    meters_list = load_meters("data/meters.json", objects_list)
-    meter = find_meter_by_id(meters_list, meter_id)
-    consumption = None
-    if meter is not None:
-        readings = load_readings("data/readings.json", meters_list)
-        meter_readings = filter_readings_by_meter(readings, meter.id)
-        consumption = calculate_consumption(meter_readings, meter.id)
-    context = {
-        "meter": meter,
-        "consumption": consumption,
-    }
+    conn = get_connection()
+    meter = conn.execute(
+        """
+        SELECT m.id, m.number, m.meter_type, m.status, o.address
+        FROM meters m
+        JOIN accounting_objects o ON m.object_id = o.id
+        WHERE m.id = ?
+        """,
+        (meter_id,),
+    ).fetchone()
+    conn.close()
     return render(
         request,
         "meters/meter_detail.html",
-        context,
+        {"meter": meter},
         status=404 if meter is None else 200,
     )

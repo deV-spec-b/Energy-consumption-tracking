@@ -1,10 +1,13 @@
 <article class="card reading-card mb-3">
     <div class="card-body">
         <h2 class="card-title">
-            {{ reading.meter.number }} – {{ reading.reading_date }}
+            {{ reading.number }} – {{ reading.reading_date }}
         </h2>
         <p class="card-text">
             Значение: {{ reading.value }}
+        </p>
+        <p class="card-text">
+            {{ reading.meter_type }} · {{ reading.address }}
         </p>
         <a href="{% url 'readings:detail' reading.id %}" class="btn btn-primary">
             Подробнее

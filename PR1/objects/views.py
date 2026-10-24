@@ -1,26 +1,34 @@
 from django.shortcuts import render
-
-from models.objects import find_object_by_id
-from storage import load_objects
+from db.database import get_connection
 
 
 def objects_list(request):
-    objects_list_data = load_objects("data/objects.json")
-    context = {
-        "objects": objects_list_data,
-    }
-    return render(request, "objects/object_list.html", context)
+    conn = get_connection()
+    objects = conn.execute(
+        """
+        SELECT id, address, object_type, area
+        FROM accounting_objects
+        ORDER BY address
+        """
+    ).fetchall()
+    conn.close()
+    return render(request, "objects/object_list.html", {"objects": objects})
 
 
 def object_detail(request, object_id):
-    objects_list_data = load_objects("data/objects.json")
-    accounting_object = find_object_by_id(objects_list_data, object_id)
-    context = {
-        "accounting_object": accounting_object,
-    }
+    conn = get_connection()
+    accounting_object = conn.execute(
+        """
+        SELECT id, address, object_type, area
+        FROM accounting_objects
+        WHERE id = ?
+        """,
+        (object_id,),
+    ).fetchone()
+    conn.close()
     return render(
         request,
         "objects/object_detail.html",
-        context,
+        {"accounting_object": accounting_object},
         status=404 if accounting_object is None else 200,
     )
